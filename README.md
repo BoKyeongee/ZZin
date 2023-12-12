@@ -1,6 +1,6 @@
 
 <div align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=f55951&height=300&section=header&text=찐-맛집%20매칭%20어플&fontSize=70&&fontAlignY=40&animation=fadeIn&fontColor=ffffff&desc=맛에%20진심인%20사람들을%20위한%20맛집%20플랫폼&descSize=20&descAlign=50&descAlignY=60"/>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=f55951&height=300&section=header&text=찐-맛집%20매칭%20어플&fontSize=70&&fontAlignY=40&animation=fadeIn&fontColor=ffffff&desc=맛에%20진심인%20사람들을%20위한%20맛집%20플랫폼&descSize=20&descAlign=50&descAlignY=60" style="width:100%;"/>
   <img src="https://github.com/Team-Ddobaegi/ZZin/assets/136118540/ab594aea-3a37-477e-b947-c36f3d4e7eab" style="width:100%; margin-top:0;"/>
   <br/><br/>
   
@@ -83,6 +83,16 @@
 - 검색 시에 원하는 결과 값이 빈 값으로 반환되는 일이 거의 없어지고 원하는 정보들을 취득할 수 있게됨<br>
 - 카카오 로컬 API를 통해서는 행정구역명 정보도 요청하고 받아볼 수 있음<br>
 <br/><br/><br/><br/>
+
+# ⚠️ Issue & Solution ⚠️
+### 🤔 UX 개선을 위한 검토
+#### 발생했던 이슈 혹은 고민했던 부분
+- 계층화 된 페이지로 넘어간 뒤 다시 해당 페이지의 상위 페이지로 넘어갈 때 이전에 작업했던 페이지가 뜨는 현상<br>
+- 사용감을 올리기 위해서 Animation을 도입할 때 가장 적절한 지연시간은 얼마 정도의 시간일까?<br>
+#### 해결 방법
+- 상위 계층의 페이지로 이동할 수 없도록 ```viewDidLoad```에서 tabBar의 ```isHidden```을 true 처리, ```viewWillDisappear```에서 false 처리해서 **유저의 선택에 제약을 주는 방향**으로 **의견을 제시하고 이를 반영함**<br>
+- 사용자가 원하는 정보를 구획화해서 보기 쉽도록 SegmentControl을 사용하였으며, 초반에는 0.5s ~ 1s의 지연시간을 설정했으나 오히려 시선을 더 끌어 사용감을 저하시켰기에 0.3s로 변경<br>
+<a href="https://www.notion.so/bo-bo-workspace/UX-580e2a6262b74b619a74045ddec7f31d?pvs=4">➡️ UX 개선 작업 전후 비교</a>
 
 # 팀원들 별 트러블슈팅
 - 이동준
