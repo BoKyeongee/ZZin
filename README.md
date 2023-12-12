@@ -93,6 +93,53 @@
 - 상위 계층의 페이지로 이동할 수 없도록 ```viewDidLoad```에서 tabBar의 ```isHidden```을 true 처리, ```viewWillDisappear```에서 false 처리해서 **유저의 선택에 제약을 주는 방향**으로 **의견을 제시하고 이를 반영함**<br>
 - 사용자가 원하는 정보를 구획화해서 보기 쉽도록 SegmentControl을 사용하였으며, 초반에는 0.5s ~ 1s의 지연시간을 설정했으나 오히려 시선을 더 끌어 사용감을 저하시켰기에 0.3s로 변경<br>
 <a href="https://www.notion.so/bo-bo-workspace/UX-580e2a6262b74b619a74045ddec7f31d?pvs=4">➡️ UX 개선 작업 전후 비교</a>
+<br/><br/>
+
+### 🤔 Firebase를 이용하기 위한 함수 리팩토링
+#### 고민했던 부분
+- DB를 가져올 때 어떤 단위로 가져와야할까?<br>
+- FireStorage와 Firestore에서 데이터를 가져와서 바인딩 하는 것에 대한 고민<br>
+- 데이터를 가져왔을 때 사용하는 용도에 맞게 함수를 짤 수는 없을까?<br>
+- 각자의 페이지에서 중복되는 부분과 개인화할 수 있는 부분을 한 함수를 재사용해서 이용하거나, 거의 모든 페이지에 ImageView가 있는데 사진을 불러와서 바인딩하는 작업을 단축할 수는 없을까?<br>
+- 프로필 페이지 내에서 어떻게 해야 사용자가 원하는 정보만을 볼 수 있게 효율적으로 데이터를 설계할까?<br>
+- 데이터를 불러올 수 있는 두 가지 선택지<br>
+  1. 유저 데이터에 유저가 작성한 리뷰 혹은 맛집에 대한 정보를 담은 document의 이름을 포함<br>
+  2. 데이터를 가져올 때 리뷰와 맛집 collection에서 유저의 uid를 담고있는 것들을 query<br>
+
+#### 해결 방법
+- 키워드 별 정보가 필요할 때는 collection 단위에서 query 하도록 함수 작성<br>
+- 유저 정보, 특정 맛집 정보, 특정 리뷰 정보 등의 정보가 필요할 때는 document 단위에서 불러올 수 있도록 함수 작성<br>
+- Firestore의 함수를 통해서 정보를 불러오고 성공하면 FireStorage의 파일을 다운받아 바인딩을 하는 함수 작성함<br>
+- 함수의 사용성 측면에서 고민했을 때 공통으로 재사용하기 위해 공유하는 custom cell이 있다는 특성을 적극 활용하고자 했음. 각각의 VC에서 용도에 맞게 어느정도 변경해서 사용하고 있었기 때문에 파라미터로 각각의 UI를 받고 이를 nil로도 설정할 수 있게 두고 파라미터에 같이 들어갈 firestore 문서의 id만 적절하게 잘 넣어주면 한 줄만으로 바인딩이 되게 완성함<br>
+- 프로필 페이지를 그리기 위해서는 필수적으로 한 번은 Firestore에서 문서 단위로 유저의 데이터를 불러와야 했음. query를 하는 것 보다는 정확한 문서들을 가져오는 것이 낫다고 판단해서 UID를 이용한 유저 DB를 따로 설계하는 과정에서 pid와 rid를 포함(맛집에 대한 고유 값인 placeID와 리뷰에 대한 고유값인 reviewID)<br>
+
+[➡️ Firestore 함수 관련 코드 모음](https://www.notion.so/Firestore-535d8e3abc414702aef424528395a049?pvs=21)<br>
+[➡️ FireStorage 함수 관련 코드 모음](https://www.notion.so/FireStorage-3e50278e0ab245cfb5cea4cdea884bc9?pvs=21)<br/><br/>
+
+### 🤔 리뷰 작성 페이지
+#### 발생했던 이슈 혹은 고민했던 부분
+- 상점 검색 시에 ‘out of range’ 오류가 발생함<br>
+- 페이지의 scroll direction과 사진을 추가하는 section의 scroll direction이 달라야해서 tableView안에 collectionView를 넣었는데 여러 기능이 얽혀있어서 좀 더 구조를 단순히 만들면서 scroll direction을 유지할 방법이 없을까?<br>
+- 키보드 사용 후 화면을 가장 상단으로 놓고 return키를 누르면 view가 내려가면서 검정색 화면이 뜨는 오류를 어떻게 해결해야할까?```(현재 업데이트 중에 있음)```<br>
+
+#### 해결 방법
+- print문은 정상적으로 받아와졌으나 검색결과가 많아지는 단어(예를 들면 ‘스타벅스’)가 입력되는 경우 갑작스럽게 종료가 되는 것을 볼 수 있었다. 텍스트를 입력한 것을 파라미터로 넣어서 request를 넣는데 이 결과를 받아서 reload를 하는 타이밍이 맞지 않아서 **`결과값의 수`**와과 tableView **`indexPath.row`**가 달라서 생긴 문제였다. 이를 피하기 위해 우선 completionHandler를 이용해서 요청이 완료될 경우에 reload를 하도록 했고, 추후 업데이트 시 유저 입력 후 지연시간을 부여해서 request의 횟수를 줄이는 방향도 추가할 예정 <br>
+- **`NSCollectionLayoutSection`**을 사용해서 해당 section에 **`orthogonalScrollingBehavior`**를 설정해서 scroll 방향의 문제를 해결했다. item부터 group, section까지 일일히 모두 하나씩 설정을 해야한다는 번거로움은 있었으나 하나의 collectionView만을 사용할 수 있었기 때문에 파일의 수를 줄일 수 있었고 구조도 간단하게 만들면서 코드도 간결하게 변경<br>
+- notification center를 통해 키보드의 길이만큼 view를 올렸다가 내렸지만 collectionView처럼 scroll이 가능한 view에서는 어떤 위치에 해당 텍스트 필드가 가있는지 알 수가 없기 때문에 이 방법은 옳지 않다고 판단했다. 원래는 스크롤방향을 기준으로 section을 나누고 기능 단위로 item을 나눴다. 하지만 textField 클릭시에 해당 텍스트 필드의 위치를 변경하기 위해 각 텍스트 필드를 item단위로 분리해야 한다고 판단했고, 특정한 y값으로 item이 이동하는 것으로 변경해서 해결함```(현재 업데이트 중에 있음)```<br>
+
+[➡️ 리뷰 작성 페이지](https://www.notion.so/84a1386b14c94505aac0ede8398a42d4?pvs=21)<br/><br/>
+
+
+### 🤔 프로필 페이지
+#### 발생했던 이슈 혹은 고민했던 부분
+- 프로필 이미지가 나타나지 않음<br>
+- 프로필 이미지를 편집 했을 때 Firebase Storage에는 업로드 되어있으나 프로필 사진이 이전 사진으로만 계속 뜨는 현상. 일정 시간이 지나거나 어플을 삭제하고 다시 설치하면 변경되어 있음<br>
+#### 해결 방법
+- 회원 가입 시 유저 데이터를 만들 때 profileImg 필드가 생성되지 않아 생성되는 이슈로 받아온 유저 데이터에서 profileImg 값이 nil인 경우 기본 프로필을 띄우는 동시에 기본 프로필 사진 경로를 데이터에 저장하도록 변경함<br>
+- SDWebImage 라이브러리의 캐싱으로 인해 캐시가 업데이트가 되지 않아 발생하는 문제로 파악됐음. 프로필 사진을 업로드 할 때 캐시를 업데이트 하는 코드를 작성하여 해결함<br>
+
+<a href="https://www.notion.so/84a1386b14c94505aac0ede8398a42d4?pvs=21](https://www.notion.so/bo-bo-workspace/b36191cc6e6348c084c6ab4004916e1c">➡️ 프로필 페이지</a><br/><br/>
+
 
 # 팀원들 별 트러블슈팅
 - 이동준
