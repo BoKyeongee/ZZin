@@ -138,7 +138,7 @@
 - 회원 가입 시 유저 데이터를 만들 때 profileImg 필드가 생성되지 않아 생성되는 이슈로 받아온 유저 데이터에서 profileImg 값이 nil인 경우 기본 프로필을 띄우는 동시에 기본 프로필 사진 경로를 데이터에 저장하도록 변경함<br>
 - SDWebImage 라이브러리의 캐싱으로 인해 캐시가 업데이트가 되지 않아 발생하는 문제로 파악됐음. 프로필 사진을 업로드 할 때 캐시를 업데이트 하는 코드를 작성하여 해결함<br>
 
-<a href="https://www.notion.so/84a1386b14c94505aac0ede8398a42d4?pvs=21](https://www.notion.so/bo-bo-workspace/b36191cc6e6348c084c6ab4004916e1c">➡️ 프로필 페이지</a><br/><br/>
+<a href="https://www.notion.so/84a1386b14c94505aac0ede8398a42d4?pvs=21](https://www.notion.so/bo-bo-workspace/b36191cc6e6348c084c6ab4004916e1c">➡️ 프로필 페이지</a><br/><br/><br/>
 
 
 # 팀원들 별 트러블슈팅
@@ -163,21 +163,7 @@
   
 - 최영군
 <img width="1227" alt="스크린샷 2023-11-21 오후 6 02 57" src="https://github.com/Team-Ddobaegi/ZZin/assets/136118540/0276840b-9cd8-48e1-85d9-9e7f781ca60e">
-
-
-
-- Library/Framework:
-  - SnapKit: UIKit에서 AutoLayout을 보다 쉽게 작성하기 위해 도입하였습니다.
-  - Firestore: JSON이 아닌 document 컬렉션으로 데이터 저장을 하여 원활한 쿼리 진행, Firebase 및 초기 DB를 위해 FireStore 선정
-  - Firebase Auth: 유저 정보에 대한 중복을 처리하는 알고리즘을 별도로 생성하지 않아도 되며 및 보안이 기본적으로 제공되기 때문에 선택
-  - Naver Map API: 한국을 중심으로 다른 API보다 다양한 지리적 데이터와 서비스를 제공하며 보다 많은 맵 스타일, 마커 및 레이어를 커스터마이징 하는 기능을 제공하기에 선정
-  - Kakao Local API: 상호명 검색 시 해당 가게의 이름과 주소, 위경도 좌표계, 전화번호, 행정구역명을 반환받기 위해 선정
-  - Shuffle: 어플 컨셉과 일치하는 맛집 ‘소개’와 함께 Dynamic Interaction 경험을 최초 신규 회원 가입자에게 제공하고자 선정
-  - FirebaseUI: 기본 모바일 바인딩을 제공하는 점을 활용해서 상용구 코드를 최소화 하고 간결하게 코드를 작성하기 위해 사용
-  - SDWebImage: FireStorage에서 비동기적 이미지 다운로드 및 캐싱 및 FirebaseUI와 바인딩이 쉬운 점을 활용하기 위해 사용
-  - Lottie: 정적인 회원가입 페이지 혹은 데이터 처리 중의 지연 시간 등에 생동감을 제공하는 에니메이션 효과 적용하여 유저의 사용자 경험을 높이기 위해 사용
-  - Alamofire: 코드를 가독성 있고 간결하게 유지하고 짧은 개발 기간동안 응답 및 에러처리에 대해 대처하고자 사용
-
+<br/><br/><br/><br/>
 <div align="center">
   <h1>✨ 참여한 사람들 ✨<br/></h1>
 <table>
